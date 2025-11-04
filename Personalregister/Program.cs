@@ -14,7 +14,7 @@ namespace Personalregister
             {2, "Visa alla anställda"},
             // {3, "Ta bort anställd"},
             // {4, "Sök anställd"},
-            // {5, "Avsluta"}
+            {0, "Avsluta"}
         };
 
         static void Main(string[] args)
@@ -39,9 +39,11 @@ namespace Personalregister
                             
                             Employee employee = employeeRegister.AddEmployee(name, salary);
                             Console.WriteLine("Anställd tillagd: " + employee.ToString());
-                            Console.WriteLine("Antal anställda: " + employeeRegister.GetEmployeeCount());
+                            Console.WriteLine("Antal anställda nu: " + employeeRegister.GetEmployeeCount());
                             break;
                         case 2:
+                            Console.WriteLine("");
+                            Console.WriteLine("Visar företagets " + employeeRegister.GetEmployeeCount() + " anställda:");
                             Console.WriteLine(employeeRegister.ToString());
                             break;
                         // case 3:

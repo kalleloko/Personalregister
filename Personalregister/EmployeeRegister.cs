@@ -1,5 +1,7 @@
 ﻿
 
+using System.Text;
+
 namespace Personalregister
 {
     internal class EmployeeRegister
@@ -20,7 +22,11 @@ namespace Personalregister
 
         public override string ToString()
         {
-            return "Här skulle alla anställda visas.";
+            StringBuilder sb = new StringBuilder();
+            foreach (Employee emp in employees) {
+                sb.Append(emp.ToTableRow() + "\n");
+            }
+            return sb.ToString();
         }
 
         public int GetEmployeeCount()
