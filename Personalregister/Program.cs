@@ -37,17 +37,26 @@ namespace Personalregister
                             string name = AskForString("Ange namn: ");
                             float salary = AskForFloat("Ange lön: ");
                             
-                            employeeRegister.AddEmployee(name, salary);
+                            Employee employee = employeeRegister.AddEmployee(name, salary);
+                            Console.WriteLine("Anställd tillagd: " + employee.ToString());
+                            Console.WriteLine("Antal anställda: " + employeeRegister.GetEmployeeCount());
                             break;
                         case 2:
                             Console.WriteLine(employeeRegister.ToString());
                             break;
-                            // case 3:
-                            //     employeeRegister.RemoveEmployee();
-                            //     break;
-                            // case 4:
-                            //     employeeRegister.SearchEmployee();
-                            //     break;
+                        // case 3:
+                        //     employeeRegister.RemoveEmployee();
+                        //     break;
+                        // case 4:
+                        //     employeeRegister.SearchEmployee();
+                        //     break;
+                        default:
+                            // input is garantueed to be valid due to GetInput method,
+                            // so this should never be reached
+                            // but just in case, we can exit the program
+                            doRun = false;
+                            break;
+                            
                     }
                 }
                 Console.WriteLine();

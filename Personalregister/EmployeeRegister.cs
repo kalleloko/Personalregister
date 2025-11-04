@@ -1,22 +1,31 @@
 ﻿
+
 namespace Personalregister
 {
     internal class EmployeeRegister
     {
+        private List<Employee> employees = new List<Employee>();
+
         public void AddEmployee(Employee employee)
         {
-            Console.WriteLine("Anställd tillagd: " + employee.ToString());
+            employees.Add(employee);
         }
 
-        internal void AddEmployee(string name, float salary)
+        public Employee AddEmployee(string name, float salary)
         {
             Employee employee = new Employee(name, salary);
             AddEmployee(employee);
+            return employee;
         }
 
         public override string ToString()
         {
             return "Här skulle alla anställda visas.";
+        }
+
+        public int GetEmployeeCount()
+        {
+            return employees.Count;
         }
     }
 }
