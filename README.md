@@ -33,20 +33,20 @@ EmployeeRegister - representerar listan på personer
 ### Uppgift 2
 En första outline (innan någon kod skrivits!)
 
-**Program**:
-void Main()
-+ hjälpmetoder för inmatning
+**Program**
+- void Main()
+- hjälpmetoder för inmatning
 
-**Employee**:
-string name
-float salary
-string ToString()
+**Employee**
+- string name
+- float salary
+- string ToString()
 
-**EmployeeRegister**:
-Employee[] employees
-void AddEmployee(Employee)
-void AddEmployee(string name, float salary)
-string ToString()
+**EmployeeRegister**
+- Employee[] employees
+- void AddEmployee(Employee)
+- void AddEmployee(string name, float salary)
+- string ToString()
 
 ### Uppgift 3
 Se kod
