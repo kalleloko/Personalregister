@@ -1,11 +1,14 @@
 ﻿
 
+
 namespace Personalregister
 {
     internal class Program
     {
 
-        private Dictionary<int, string> menu = new Dictionary<int, string>()
+        private static EmployeeRegister employeeRegister = new EmployeeRegister();
+
+        private static Dictionary<int, string> menu = new Dictionary<int, string>()
         {
             {1, "Lägg till anställd"},
             {2, "Visa alla anställda"},
@@ -13,6 +16,7 @@ namespace Personalregister
             // {4, "Sök anställd"},
             // {5, "Avsluta"}
         };
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hej! Vad vill du göra idag?");
@@ -27,9 +31,51 @@ namespace Personalregister
                     doRun = false;
                 } else
                 {
-                    Console.WriteLine($"Du valde: {new Program().menu[input]}");
+                    switch (input)
+                    {
+                        case 1:
+                            string name = AskForString("Ange namn: ");
+                            float salary = AskForFloat("Ange lön: ");
+                            
+                            employeeRegister.AddEmployee(name, salary);
+                            break;
+                        case 2:
+                            Console.WriteLine(employeeRegister.ToString());
+                            break;
+                            // case 3:
+                            //     employeeRegister.RemoveEmployee();
+                            //     break;
+                            // case 4:
+                            //     employeeRegister.SearchEmployee();
+                            //     break;
+                    }
                 }
+                Console.WriteLine();
             }
+        }
+
+        private static float AskForFloat(string question = "")
+        {
+            if(!string.IsNullOrEmpty(question))
+            {
+                Console.WriteLine(question);
+            }
+            float result;
+            if (!float.TryParse(Console.ReadLine(), out result))
+            {
+                Console.WriteLine("Ogiltigt värde, försök igen.");
+                return AskForFloat(question);
+            }
+            return result;
+        }
+
+        private static string AskForString(string question = "")
+        {
+            if (!string.IsNullOrEmpty(question))
+            {
+                Console.WriteLine(question);
+            }
+            return Console.ReadLine() ?? "";
         }
 
         /// <summary>
@@ -42,12 +88,12 @@ namespace Personalregister
             {
                 return 0;
             }
-            return new Program().menu.ContainsKey(input) ? input : 0;
+            return menu.ContainsKey(input) ? input : 0;
         }
 
         private static void PrintMenu()
         {
-            foreach (var item in new Program().menu)
+            foreach (var item in menu)
             {
                 Console.WriteLine($"{item.Key}. {item.Value}");
             }
