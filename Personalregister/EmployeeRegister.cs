@@ -20,11 +20,13 @@ namespace Personalregister
             return employee;
         }
 
-        public override string ToString()
+        public string ToTable()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (Employee emp in employees) {
-                sb.Append(emp.ToTableRow() + "\n");
+            int row = 1;
+            foreach (Employee emp in employees) {   
+                sb.Append(row + ". " + emp.ToTableRow() + "\n");
+                row++;
             }
             return sb.ToString();
         }
@@ -32,6 +34,14 @@ namespace Personalregister
         public int GetEmployeeCount()
         {
             return employees.Count;
+        }
+
+        public void RemoveEmployee(int id)
+        {
+            if (id >= 0 && id < employees.Count)
+            {
+                employees.RemoveAt(id);
+            }
         }
     }
 }

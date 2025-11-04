@@ -1,6 +1,7 @@
 ﻿
 
 
+
 namespace Personalregister
 {
     internal class Program
@@ -12,7 +13,7 @@ namespace Personalregister
         {
             {1, "Lägg till anställd"},
             {2, "Visa alla anställda"},
-            // {3, "Ta bort anställd"},
+            {3, "Ta bort anställd"},
             // {4, "Sök anställd"},
             {0, "Avsluta"}
         };
@@ -44,11 +45,14 @@ namespace Personalregister
                         case 2:
                             Console.WriteLine("");
                             Console.WriteLine("Visar företagets " + employeeRegister.GetEmployeeCount() + " anställda:");
-                            Console.WriteLine(employeeRegister.ToString());
+                            Console.WriteLine(employeeRegister.ToTable());
                             break;
-                        // case 3:
-                        //     employeeRegister.RemoveEmployee();
-                        //     break;
+                        case 3:
+                            Console.WriteLine("");
+                            int id = AskForInt("Välj nummer på anställd du vill ta bort: \n" + employeeRegister.ToTable());
+                            employeeRegister.RemoveEmployee(id-1);
+                            Console.WriteLine("Företaget har nu " + employeeRegister.GetEmployeeCount() + " anställda");
+                            break;
                         // case 4:
                         //     employeeRegister.SearchEmployee();
                         //     break;
@@ -63,6 +67,21 @@ namespace Personalregister
                 }
                 Console.WriteLine();
             }
+        }
+
+        private static int AskForInt(string question = "")
+        {
+            if (!string.IsNullOrEmpty(question))
+            {
+                Console.WriteLine(question);
+            }
+            int result;
+            if (!int.TryParse(Console.ReadLine(), out result))
+            {
+                Console.WriteLine("Ogiltigt värde, försök igen.");
+                return AskForInt(question);
+            }
+            return result;
         }
 
         private static float AskForFloat(string question = "")
