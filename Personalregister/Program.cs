@@ -1,5 +1,5 @@
 ﻿
-
+using System.Reflection;
 
 
 namespace Personalregister
@@ -25,7 +25,7 @@ namespace Personalregister
             while (doRun)
             {
                 PrintMenu();
-                int input = GetInput();
+                int input = GetMenuInput();
                 if(input == 0)
                 {
                     Console.WriteLine("Tack och hej!");
@@ -35,8 +35,8 @@ namespace Personalregister
                     switch (input)
                     {
                         case 1:
-                            string name = AskForString("Ange namn: ");
-                            float salary = AskForFloat("Ange lön: ");
+                            string name = AskForValue<string>("Ange namn: ");
+                            float salary = AskForValue<float>("Ange lön: ");
                             
                             Employee employee = employeeRegister.AddEmployee(name, salary);
                             Console.WriteLine("Anställd tillagd: " + employee.ToString());
@@ -49,7 +49,7 @@ namespace Personalregister
                             break;
                         case 3:
                             Console.WriteLine("");
-                            int id = AskForInt("Välj nummer på anställd du vill ta bort: \n" + employeeRegister.ToTable());
+                            int id = AskForValue<int>("Välj nummer på anställd du vill ta bort: \n" + employeeRegister.ToTable());
                             employeeRegister.RemoveEmployee(id-1);
                             Console.WriteLine("Företaget har nu " + employeeRegister.GetEmployeeCount() + " anställda");
                             break;
@@ -69,50 +69,54 @@ namespace Personalregister
             }
         }
 
-        private static int AskForInt(string question = "")
+        private static T AskForValue<T>(string question = "")
         {
             if (!string.IsNullOrEmpty(question))
             {
                 Console.WriteLine(question);
             }
-            int result;
-            if (!int.TryParse(Console.ReadLine(), out result))
+
+            string? input = Console.ReadLine();
+
+            // Specialfall för string
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)(input ?? "");
+            }
+
+            // Hämta TryParse(string, out T)
+            var tryParseMethod = typeof(T).GetMethod(
+                "TryParse",
+                BindingFlags.Public | BindingFlags.Static,
+                null,
+                new Type[] { typeof(string), typeof(T).MakeByRefType() },
+                null
+            );
+
+            if (tryParseMethod == null)
+            {
+                return default!;
+            }
+
+            // Skapa argumentlista för TryParse
+            object?[] args = new object?[] { input, null };
+
+            // Anropa metoden: bool success = T.TryParse(input, out value)
+            bool success = (bool)tryParseMethod.Invoke(null, args)!;
+
+            if (!success)
             {
                 Console.WriteLine("Ogiltigt värde, försök igen.");
-                return AskForInt(question);
+                return AskForValue<T>(question);
             }
-            return result;
-        }
-
-        private static float AskForFloat(string question = "")
-        {
-            if(!string.IsNullOrEmpty(question))
-            {
-                Console.WriteLine(question);
-            }
-            float result;
-            if (!float.TryParse(Console.ReadLine(), out result))
-            {
-                Console.WriteLine("Ogiltigt värde, försök igen.");
-                return AskForFloat(question);
-            }
-            return result;
-        }
-
-        private static string AskForString(string question = "")
-        {
-            if (!string.IsNullOrEmpty(question))
-            {
-                Console.WriteLine(question);
-            }
-            return Console.ReadLine() ?? "";
+            return (T)args[1]!; // args[1] innehåller 'out'-resultatet
         }
 
         /// <summary>
         /// get user input and validate it
         /// </summary>
         /// <returns>an int that corresponds to a menu item</returns>
-        private static int GetInput()
+        private static int GetMenuInput()
         {
             if(!int.TryParse(Console.ReadLine(), out int input))
             {
@@ -123,10 +127,12 @@ namespace Personalregister
 
         private static void PrintMenu()
         {
+            Console.WriteLine("--------------------------");
             foreach (var item in menu)
             {
                 Console.WriteLine($"{item.Key}. {item.Value}");
             }
+            Console.WriteLine("--------------------------");
         }
     }
 }
